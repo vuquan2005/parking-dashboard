@@ -48,9 +48,15 @@ export const useDebugStore = defineStore('debug', () => {
         messages.value = []
     }
 
+    function reset() {
+        clearMessages()
+        nextMessageId = 1
+    }
+
     return {
         messages,
         addMessage,
         clearMessages,
+        reset,
     }
 })

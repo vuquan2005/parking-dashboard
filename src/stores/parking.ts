@@ -66,6 +66,13 @@ export const useParkingStore = defineStore('parking', () => {
         () => slots.value.filter((s) => s.status === 'PROCESSING').length,
     )
 
+    function reset() {
+        slots.value = []
+        events.value = []
+        selectedFilter.value = null
+        selectedPalletLabel.value = null
+    }
+
     return {
         selectedFilter,
         selectedPalletLabel,
@@ -81,5 +88,6 @@ export const useParkingStore = defineStore('parking', () => {
         emptyCount,
         occupiedCount,
         processingCount,
+        reset,
     }
 })

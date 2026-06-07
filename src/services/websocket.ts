@@ -30,6 +30,7 @@ let reconnectTimer: ReturnType<typeof setTimeout> | null = null
 let reconnectDelay = RECONNECT_BASE_MS
 let shouldReconnect = true
 let resolvedUrl = ''
+let lastUptimeSeconds = -1
 
 export const getStoredWsUrl = () => localStorage.getItem('ws_url') || ''
 
@@ -83,6 +84,20 @@ export function dispatch(parking: ReturnType<typeof Parking.decode>) {
 
     if (parking.wifiStatus) {
         const info = mapDeviceStatus(parking.wifiStatus)
+        let currentUptime = info.uptimeSeconds
+        if (
+            currentUptime < 10 ||
+            (lastUptimeSeconds !== -1 && currentUptime < lastUptimeSeconds)
+        ) {
+            console.info(
+                `[ws] Resetting Pinia stores. New uptime: ${currentUptime}s, old uptime: ${lastUptimeSeconds}s`,
+            )
+            parkingStore.reset()
+            deviceStore.reset()
+            debugStore.reset()
+            currentUptime = -1
+        }
+        lastUptimeSeconds = currentUptime
         deviceStore.updateDeviceStatus(info)
     }
 

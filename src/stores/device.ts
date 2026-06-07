@@ -66,6 +66,12 @@ export const useDeviceStore = defineStore('device', () => {
         wsStatus.value = status
     }
 
+    function reset() {
+        scanResults.value = []
+        deviceStatus.value = null
+        isScanning.value = false
+    }
+
     return {
         // state
         scanResults,
@@ -79,5 +85,6 @@ export const useDeviceStore = defineStore('device', () => {
         updateDeviceStatus,
         setScanning,
         updateWsStatus,
+        reset,
     }
 })
